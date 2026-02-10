@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Asana Studio — Explore 300+ yoga poses, build custom sequences, and practice with guided timers and voice cues.">
+    <title>Asana Studio — Yoga Pose Explorer & Practice Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- ───── Header ───── -->
+    <header id="app-header">
+        <div class="header-inner">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 40 40" width="36" height="36">
+                    <circle cx="20" cy="8" r="4" fill="currentColor" opacity="0.9"/>
+                    <path d="M20 14 L20 28 M14 20 L26 20 M16 32 L20 26 L24 32" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                </svg>
+                <h1>Asana Studio</h1>
+            </div>
+            <nav id="main-nav">
+                <button class="nav-btn active" data-tab="explore">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    Explore
+                </button>
+                <button class="nav-btn" data-tab="sequences">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    Sequences
+                </button>
+                <button class="nav-btn" data-tab="practice">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21"/></svg>
+                    Practice
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ───── Main Content ───── -->
+    <main id="app-main">
+        <!-- Explore Tab -->
+        <section id="tab-explore" class="tab-content active">
+            <div class="section-header">
+                <h2>Explore Poses</h2>
+                <div class="search-bar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="pose-search" placeholder="Search poses... (e.g. pigeon, warrior)">
+                </div>
+            </div>
+            <div class="filter-bar" id="filter-bar">
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="filter-category"><option value="">All</option></select>
+                </div>
+                <div class="filter-group">
+                    <label>Difficulty</label>
+                    <select id="filter-difficulty">
+                        <option value="">All</option>
+                        <option value="1">⭐ Beginner</option>
+                        <option value="2">⭐⭐ Easy</option>
+                        <option value="3">⭐⭐⭐ Intermediate</option>
+                        <option value="4">⭐⭐⭐⭐ Advanced</option>
+                        <option value="5">⭐⭐⭐⭐⭐ Expert</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Tag</label>
+                    <select id="filter-tag"><option value="">All</option></select>
+                </div>
+                <button class="btn btn-ghost" id="clear-filters">Clear Filters</button>
+            </div>
+            <div class="pose-count" id="pose-count"></div>
+            <div class="pose-grid" id="pose-grid"></div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+
+        <!-- Sequences Tab -->
+        <section id="tab-sequences" class="tab-content">
+            <div class="section-header">
+                <h2>Sequence Generator</h2>
+            </div>
+            <div class="seq-generator" id="seq-generator">
+                <div class="seq-form glass-card">
+                    <h3>Build a Sequence</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="seq-style">Style</label>
+                            <select id="seq-style"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="seq-duration">Duration (min)</label>
+                            <input type="number" id="seq-duration" value="20" min="5" max="90">
+                        </div>
+                        <div class="form-group">
+                            <label for="seq-difficulty">Max Difficulty</label>
+                            <select id="seq-difficulty">
+                                <option value="1">⭐ Beginner</option>
+                                <option value="2">⭐⭐ Easy</option>
+                                <option value="3" selected>⭐⭐⭐ Intermediate</option>
+                                <option value="4">⭐⭐⭐⭐ Advanced</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Expert</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="generate-sequence">✨ Generate Sequence</button>
+                </div>
+                <div id="generated-sequence" class="seq-result" style="display:none;"></div>
+            </div>
+            <div class="saved-sequences" id="saved-sequences">
+                <h3>Saved Sequences</h3>
+                <div id="saved-list"></div>
+            </div>
+        </section>
+
+        <!-- Practice Tab -->
+        <section id="tab-practice" class="tab-content">
+            <div id="practice-builder">
+                <div class="section-header">
+                    <h2>My Practice</h2>
+                    <div class="practice-actions">
+                        <button class="btn btn-ghost" id="load-practice-btn">Load Practice</button>
+                        <button class="btn btn-primary" id="start-practice-btn" disabled>▶ Start Practice</button>
+                    </div>
+                </div>
+                <div class="practice-builder-layout">
+                    <div class="practice-search glass-card">
+                        <h3>Add Poses</h3>
+                        <input type="text" id="practice-pose-search" placeholder="Search to add...">
+                        <div id="practice-search-results"></div>
+                    </div>
+                    <div class="practice-queue glass-card">
+                        <h3>Practice Queue <span id="queue-count">(0 poses)</span></h3>
+                        <div id="practice-queue-list"></div>
+                        <div class="practice-summary" id="practice-summary" style="display:none;">
+                            <span id="total-duration"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Practice Player (hidden until started) -->
+            <div id="practice-player" style="display:none;">
+                <div class="player-header">
+                    <button class="btn btn-ghost" id="exit-practice">✕ Exit</button>
+                    <div class="player-progress-bar">
+                        <div class="player-progress-fill" id="player-progress-fill"></div>
+                    </div>
+                    <span id="player-progress-text"></span>
+                </div>
+                <div class="player-body">
+                    <div class="player-phase" id="player-phase"></div>
+                    <div class="player-pose-svg" id="player-pose-svg"></div>
+                    <h2 class="player-pose-name" id="player-pose-name"></h2>
+                    <p class="player-pose-sanskrit" id="player-pose-sanskrit"></p>
+                    <p class="player-pose-side" id="player-pose-side"></p>
+                    <div class="timer-ring" id="timer-ring">
+                        <svg viewBox="0 0 200 200" class="timer-svg">
+                            <circle cx="100" cy="100" r="90" class="timer-track"/>
+                            <circle cx="100" cy="100" r="90" class="timer-fill" id="timer-circle"/>
+                        </svg>
+                        <div class="timer-text" id="timer-text">0:30</div>
+                    </div>
+                    <div class="player-controls">
+                        <button class="control-btn" id="btn-prev" title="Previous">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+                        </button>
+                        <button class="control-btn control-btn-main" id="btn-play-pause" title="Play/Pause">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor" id="icon-play"><polygon points="5 3 19 12 5 21"/></svg>
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor" id="icon-pause" style="display:none;"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+                        </button>
+                        <button class="control-btn" id="btn-next" title="Next">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+                        </button>
+                    </div>
+                    <div class="player-next-up" id="player-next-up"></div>
+                </div>
+                <div class="player-settings">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="voice-toggle" checked>
+                        <span>🔊 Voice</span>
+                    </label>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pose Detail Modal -->
+    <div class="modal-overlay" id="pose-modal" style="display:none;">
+        <div class="modal glass-card">
+            <button class="modal-close" id="modal-close">✕</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Load Practice Modal -->
+    <div class="modal-overlay" id="load-practice-modal" style="display:none;">
+        <div class="modal glass-card">
+            <button class="modal-close" id="load-modal-close">✕</button>
+            <h3>Load a Practice or Sequence</h3>
+            <div id="load-practice-list"></div>
+        </div>
+    </div>
+
+    <script src="/js/svg-poses.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/poses.js"></script>
+    <script src="/js/sequences.js"></script>
+    <script src="/js/practice.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>

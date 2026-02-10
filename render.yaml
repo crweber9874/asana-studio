@@ -1,0 +1,10 @@
+# Render.com deployment config
+services:
+  - type: web
+    name: asana-studio
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
